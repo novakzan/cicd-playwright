@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]
-  container:
+    container:
     image: mcr.microsoft.com/playwright:v1.55.0-noble
     options: --user 1001
     steps:
