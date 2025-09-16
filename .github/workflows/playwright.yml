@@ -8,6 +8,9 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -15,13 +18,14 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
+    - name: Install Playwright (${{ matrix.browser }})
+      run: npx playwright install --with-deps ${{ matrix.browser }}
+    - name: Run Playwright (${{ matrix.browser }})
+      run: npx playwright test --project=${{ matrix.browser }}
     - uses: actions/upload-artifact@v4
+    - name: Upload HTML report (${{ matrix.browser }})
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
+        name: report-${{ matrix.browser }}
         path: playwright-report/
         retention-days: 30
