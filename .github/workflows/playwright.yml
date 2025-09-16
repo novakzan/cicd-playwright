@@ -27,7 +27,7 @@ jobs:
       - name: Run Playwright (${{ matrix.browser }})
         run: npx playwright test --project=${{ matrix.browser }}
       - name: Upload HTML report (${{ matrix.browser }})
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: report-${{ matrix.browser }}
