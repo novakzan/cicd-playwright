@@ -6,26 +6,29 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     strategy:
+      fail-fast: false
       matrix:
         browser: [chromium, firefox, webkit]
+
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright (${{ matrix.browser }})
-      run: npx playwright install --with-deps ${{ matrix.browser }}
-    - name: Run Playwright (${{ matrix.browser }})
-      run: npx playwright test --project=${{ matrix.browser }}
-    - name: Upload HTML report (${{ matrix.browser }})
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
-      with:
-        name: report-${{ matrix.browser }}
-        path: playwright-report/
-        retention-days: 30
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright (${{ matrix.browser }})
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+      - name: Run Playwright (${{ matrix.browser }})
+        run: npx playwright test --project=${{ matrix.browser }}
+      - name: Upload HTML report (${{ matrix.browser }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: report-${{ matrix.browser }}
+          path: playwright-report/
+          retention-days: 30
