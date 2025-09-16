@@ -14,8 +14,8 @@ jobs:
       matrix:
         browser: [chromium, firefox, webkit]
     container:
-    image: mcr.microsoft.com/playwright:v1.55.0-noble
-    options: --user 1001
+      image: mcr.microsoft.com/playwright:v1.55.0-noble
+      options: --user 1001
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
