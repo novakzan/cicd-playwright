@@ -22,8 +22,8 @@ jobs:
       run: npx playwright install --with-deps ${{ matrix.browser }}
     - name: Run Playwright (${{ matrix.browser }})
       run: npx playwright test --project=${{ matrix.browser }}
-    - uses: actions/upload-artifact@v4
     - name: Upload HTML report (${{ matrix.browser }})
+    - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: report-${{ matrix.browser }}
