@@ -33,3 +33,9 @@ jobs:
           name: report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 30
+      - uses: act10ns/slack@v2
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+          channel: 'cicd-playwright'
+        if: always()
