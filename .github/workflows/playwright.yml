@@ -42,8 +42,11 @@ jobs:
           channel: '#cicd-playwright'
           status: ${{ job.status }}
           message: |
-            ${{ job.status == 'success' && '✅' || (job.status == 'failure' && '❌' || '🚫') }}
+            ${{ job.status == 'success' && '✅' || job.status == 'failure' && '❌' || '🚫' }}
             Playwright (${{ matrix.browser }}) finished with *${{ job.status }}*
-            Repo: ${{ github.repository }} • Branch: ${{ github.ref_name }} • Commit: ${{ github.sha }}
-            <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open run>
+            Repo: <https://github.com/${{ github.repository }}|${{ github.repository }}>
+            Branch: <https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}|${{ github.ref_name }}>
+            Commit: <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha::7 }}>
+            <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open run> •
+            <https://github.com/${{ github.repository }}/suites/${{ github.run_id }}/artifacts|Download report>
 
