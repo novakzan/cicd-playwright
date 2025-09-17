@@ -35,9 +35,14 @@ jobs:
           name: report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 30
-      - uses: act10ns/slack@v2
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-          channel: 'cicd-playwright'
+      - name: Notify Slack (${{ matrix.browser }})
         if: always()
+        uses: act10ns/slack@v2
+        with:
+          channel: '#cicd-playwright'
+          status: ${{ job.status }}
+          fields: repo,ref,commit,workflow,job
+          text: |
+            ${{ job.status == 'success' && '✅' || (job.status == 'failure' && '❌' || '🚫') }}
+            Playwright (${{ matrix.browser }}) finished with *${{ job.status }}*  
+            <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|Open run>
